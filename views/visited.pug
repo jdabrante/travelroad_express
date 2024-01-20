@@ -1,0 +1,8 @@
+block content
+	h1= "My Travel Bucket List"
+	h2= "Places I've Already Been To"
+	ul
+		each place in visited
+			li= place.name
+	p
+		a(href='/') Go Back
