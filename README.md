@@ -288,11 +288,98 @@ ssh arkania "
 
 A continuación se realizarán las modificaciones en el proyecto para que muestre en diferentes rutas los sitios visitados y aquellos que se quieren visitar.
 
+Para la modificación, en primer lugar ha sido necesario configurar el fichero que gestiona las rutas, añadiendo dos nuevas, "/visited" y "/wished". Además de definir las variables que le serán pasadas a las mismas para poder renderizar 
+las vistas correspondientes:
 
+```
+const db = require("../config/database");
+let express = require("express");
+let router = express.Router();
 
-> ***IMPORTANTE:*** si estamos capturando una terminal no hace falta capturar todo el escritorio y es importante que se vea el nombre de usuario.
+/* GET home page. */
+router.get("/", async function (req, res, next) {
+  const { rows: wished } = await db.query(
+    "SELECT * FROM places WHERE visited=false"
+  );
+  const { rows: visited } = await db.query(
+    "SELECT * FROM places WHERE visited=true"
+  );
+  res.render("index", { wished, visited });
+});
 
-Si encontramos dificultades a la hora de realizar algún paso debemos explicar esas dificultades, que pasos hemos seguido para resolverla y los resultados obtenidos.
+router.get("/wished", async function (req, res, next) {
+    const {rows:wished} = await db.query(
+      "SELECT * FROM places WHERE visited=false"
+);
+   res.render("wished", {wished});
+});
+
+router.get("/visited", async function (req, res, next) {
+    const {rows:visited} = await db.query(
+      "SELECT * FROM places WHERE visited=true"
+);
+   res.render("visited", {visited});
+});
+
+module.exports = router;
+```
+
+Una vez configuradas las rutas, ya solo queda gestionar las vistas. Para ello se han creado do nuevos ficheros dentro del directirio de views:
+
+- Visited:
+
+```
+block content
+	h1= "My Travel Bucket List"
+	h2= "Places I've Already Been To"
+	ul
+		each place in visited
+			li= place.name
+	p
+		a(href='/') Go Back
+```
+
+- Wished:
+
+```
+block content
+	h1= "My Travel Bucket List"
+	h2= "Places I'd Like to Visit"
+	ul
+		each place in wished
+			li= place.name
+	p
+		a(href='/') Go Back
+```
+
+Y se ha modificado el index para poder acceder a estas dos nuevas rutas:
+
+```
+block content
+  h1= "My Travel Bucket List"
+  p
+    a(href='/visited') Places I'd Like to Visit
+  p 
+    a(href='/wished') Places I've Already Been To
+
+  p!= "&#x1f4ab; Powered by Express"
+```
+<br>
+
+<center>
+
+![image1](1e.png)
+
+<br>
+
+![image2](2e.png)
+
+<br>
+
+![image3](3e.png)
+
+</center>
+
 
 #### ***Conclusiones***. <a name="id5"></a>
 
