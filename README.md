@@ -383,4 +383,5 @@ block content
 
 #### ***Conclusiones***. <a name="id5"></a>
 
-En esta parte debemos exponer las conclusiones que sacamos del desarrollo de la prácica.
+En esta práctica hemos aprenido como desplegar una aplicación con el framework para JavaScript, Express. 
+La conclusión principal a la que se puede llegar es que existe una diferencia entre el despliegue de frameworks, siendo necesario, por ejemplo en este caso pm2 para poder hacer el despliegued de manera satisfactoria.
